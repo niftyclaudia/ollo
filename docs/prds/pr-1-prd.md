@@ -188,38 +188,38 @@ Define BEFORE implementation. Use checkboxes.
 Reference testing standards from `gauntlet-03/prd-v1.md`.
 
 - **Happy Path**
-  - [ ] App launches successfully from Applications folder
-  - [ ] Gate: Window appears in <5 seconds with title "ollo"
-  - [ ] Gate: Three-panel layout renders correctly
-  - [ ] Gate: Empty state message displays properly
+  - [x] App launches successfully from Applications folder ✅
+  - [x] Gate: Window appears in <5 seconds with title "ollo" ✅
+  - [x] Gate: Three-panel layout renders correctly ✅
+  - [x] Gate: Empty state message displays properly ✅
   
 - **Edge Cases**
-  - [ ] App launches with different screen resolutions
-  - [ ] Gate: Minimum window size enforced (1280x720px)
-  - [ ] Gate: Window resizing works correctly
-  - [ ] Gate: Multiple monitor setups handled properly
+  - [x] App launches with different screen resolutions ✅
+  - [x] Gate: Minimum window size enforced (1280x720px) ✅
+  - [x] Gate: Window resizing works correctly ✅
+  - [x] Gate: Multiple monitor setups handled properly ✅
   
 - **Video Processing**
-  - [ ] No video processing required for launch
-  - [ ] Gate: App ready for video import (empty state)
+  - [x] No video processing required for launch ✅
+  - [x] Gate: App ready for video import (empty state) ✅
   
 - **Performance (see prd-v1.md)**
-  - [ ] App load <5s (PERF-4)
-  - [ ] Gate: Cold start to interactive UI <5 seconds
-  - [ ] Gate: Window rendering smooth without flicker
+  - [x] App load <5s (PERF-4) ✅
+  - [x] Gate: Cold start to interactive UI <5 seconds ✅
+  - [x] Gate: Window rendering smooth without flicker ✅
 
 ---
 
 ## 13. Definition of Done
 
 See standards in `gauntlet-03/prd-v1.md`:
-- [ ] Tauri window configuration implemented
-- [ ] React components render three-panel layout
-- [ ] Empty state UI displays correctly
-- [ ] Window size constraints enforced
-- [ ] All acceptance gates pass
-- [ ] App launches without errors
-- [ ] Performance target met (<5s launch time)
+- [x] Tauri window configuration implemented ✅
+- [x] React components render three-panel layout ✅
+- [x] Empty state UI displays correctly ✅
+- [x] Window size constraints enforced ✅
+- [x] All acceptance gates pass ✅
+- [x] App launches without errors ✅
+- [x] Performance target met (<5s launch time) ✅
 
 ---
 
