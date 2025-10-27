@@ -17,10 +17,9 @@ When starting, you will receive:
 
 **Read these before starting:**
 - `gauntlet-03/docs/pr-brief/pr-briefs.md` — Your specific PR details
-- `gauntlet-03/docs/prd-full-features.md` — Big picture context
+- `gauntlet-03/prd-v1.md` — Complete project requirements and context
 - `gauntlet-03/agents/prd-template.md` — Template to fill out
 - `gauntlet-03/agents/todo-template.md` — Template to fill out
-- `gauntlet-03/agents/shared-standards.md` — Common requirements and standards
 
 ## Output Documents
 
@@ -34,7 +33,7 @@ When starting, you will receive:
 
 ### Step 1: Read and Understand
 1. Find your PR in `gauntlet-03/docs/pr-brief/pr-briefs.md`
-2. Read supporting docs (full features, existing PRDs)
+2. Read supporting docs (prd-v1.md, existing PRDs)
 3. Answer key questions:
    - What video editing problem does this solve?
    - Who is the user?
@@ -46,17 +45,17 @@ When starting, you will receive:
 ### Step 2: Create PRD
 **File:** `gauntlet-03/docs/prds/pr-{number}-prd.md`
 
-Use the template at `gauntlet-03/agents/prd-template.md` and reference standards from `gauntlet-03/agents/shared-standards.md`.
+Use the template at `gauntlet-03/agents/prd-template.md` and reference requirements from `gauntlet-03/prd-v1.md`.
 
 **Critical sections:**
 1. **Summary** — Problem and outcome in 1-2 sentences
 2. **Problem & Goals** — User problem, why now, 2-3 measurable goals
 3. **Non-Goals** — What's excluded to avoid scope creep
-4. **Success Metrics** — Use template from gauntlet-03/agents/shared-standards.md
+4. **Success Metrics** — Use performance targets from prd-v1.md
 5. **Users & Stories** — 3-5 user stories for video editing
 6. **Experience Specification** — Entry points, flows, states, performance targets
 7. **Functional Requirements** — MUST vs SHOULD with acceptance gates
-8. **Data Model** — Reference examples from shared-standards.md
+8. **Data Model** — Reference examples from prd-v1.md
 9. **Service Contracts** — Specify Tauri commands with parameters/returns/errors
 10. **UI Components** — List all files to create/modify
 11. **Test Plan** — Define BEFORE implementation with checkboxes
@@ -99,7 +98,7 @@ Use the template at `gauntlet-03/agents/todo-template.md`.
 4. UI Components (views, state management)
 5. Integration (file system, video processing)
 6. Testing (unit, UI, video processing)
-7. Performance (verify targets from shared-standards.md)
+7. Performance (verify targets from prd-v1.md)
 8. Documentation (comments, README, PR description)
 
 ### Step 5: Review and Finalize
@@ -119,7 +118,7 @@ TODO:
 - [ ] Each task has acceptance criteria
 - [ ] All PRD requirements covered
 - [ ] Testing tasks included
-- [ ] References gauntlet-03/agents/shared-standards.md where appropriate
+- [ ] References gauntlet-03/prd-v1.md where appropriate
 
 ### Step 6: Handoff
 **If YOLO: false** (PRD already reviewed):
@@ -157,7 +156,7 @@ TODO:
 
 ## Common Mistakes to Avoid
 
-❌ Vague requirements → ✅ Specific metrics (see shared-standards.md)  
+❌ Vague requirements → ✅ Specific metrics (see prd-v1.md)  
 ❌ Missing edge cases → ✅ "What if video file is corrupted?"  
 ❌ No acceptance criteria → ✅ Define pass/fail gates  
 ❌ Giant tasks → ✅ Break into 10+ small tasks  

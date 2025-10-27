@@ -18,8 +18,7 @@ When starting, you will receive:
 **READ these first:**
 - `gauntlet-03/docs/prds/pr-{number}-prd.md` — Requirements
 - `gauntlet-03/docs/todos/pr-{number}-todo.md` — Step-by-step guide
-- `gauntlet-03/docs/prd-full-features.md` — Context
-- `gauntlet-03/agents/shared-standards.md` — Common requirements and patterns
+- `gauntlet-03/prd-v1.md` — Complete project context
 
 ---
 
@@ -51,17 +50,17 @@ git checkout -b feat/pr-{number}-{feature-name}
 - Keep PRD open as reference
 
 **Code quality:**
-- Follow patterns in `gauntlet-03/agents/shared-standards.md`
+- Follow patterns in `gauntlet-03/.cursorrules`
 - Use proper TypeScript types
 - Include comments for complex logic
 - Keep functions small and focused
 
 ### Step 4: Manual Testing
-**Follow manual testing protocol from `gauntlet-03/agents/test-template.md`**
+**Follow manual testing protocol from `gauntlet-03/prd-v1.md`**
 
 Required testing approach:
 1. **Manual validation** (mandatory): Test with real video files
-2. **Performance verification** (mandatory): Verify targets from shared-standards.md
+2. **Performance verification** (mandatory): Verify targets from prd-v1.md
 3. **Cross-platform testing** (mandatory): Test on macOS and Windows
 
 **Note:** Visual appearance (colors, spacing, fonts) verified manually by user.
@@ -71,7 +70,7 @@ Check every gate from PRD Section 12:
 - [ ] All "Happy Path" gates pass
 - [ ] All "Edge Case" gates pass
 - [ ] All "Video Processing" gates pass
-- [ ] All "Performance" gates pass (see shared-standards.md)
+- [ ] All "Performance" gates pass (see prd-v1.md)
 
 **If any gate fails:**
 1. Document failure in TODO
@@ -134,7 +133,7 @@ One sentence: what does this PR do?
 
 ## Checklist
 - [ ] All TODO items completed
-- [ ] Code follows patterns from gauntlet-03/agents/shared-standards.md
+- [ ] Code follows patterns from gauntlet-03/.cursorrules
 - [ ] No console warnings
 - [ ] Documentation updated
 
@@ -152,7 +151,7 @@ Any gotchas, trade-offs, or future improvements
 - ✅ Manual testing complete with real video files
 - ✅ Performance targets verified
 - ✅ Cross-platform testing done
-- ✅ Code review self-checklist complete (shared-standards.md)
+- ✅ Code review self-checklist complete (.cursorrules)
 - ✅ No console warnings
 - ✅ Documentation updated
 - ✅ PR description complete
@@ -185,4 +184,4 @@ Any gotchas, trade-offs, or future improvements
 
 **Remember:** Quality over speed. Better to ship solid feature late than buggy feature on time.
 
-**See common issues and solutions in `gauntlet-03/agents/shared-standards.md`**
+**See common issues and solutions in `gauntlet-03/.cursorrules`**
