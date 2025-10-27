@@ -33,7 +33,6 @@ When starting, you will receive:
 ## Workflow
 
 ### Step 1: Read and Understand
-
 1. Find your PR in `gauntlet-03/docs/pr-brief/pr-briefs.md`
 2. Read supporting docs (full features, existing PRDs)
 3. Answer key questions:
@@ -45,7 +44,6 @@ When starting, you will receive:
    - What could go wrong (risks)?
 
 ### Step 2: Create PRD
-
 **File:** `gauntlet-03/docs/prds/pr-{number}-prd.md`
 
 Use the template at `gauntlet-03/agents/prd-template.md` and reference standards from `gauntlet-03/agents/shared-standards.md`.
@@ -73,7 +71,6 @@ Use the template at `gauntlet-03/agents/prd-template.md` and reference standards
 ```
 
 ### Step 3: Check YOLO Mode
-
 **🛑 If YOLO: false**
 1. Present completed PRD to user
 2. Wait for review and feedback
@@ -84,7 +81,6 @@ Use the template at `gauntlet-03/agents/prd-template.md` and reference standards
 - Continue directly to Step 4
 
 ### Step 4: Create TODO
-
 **File:** `gauntlet-03/docs/todos/pr-{number}-todo.md`
 
 Use the template at `gauntlet-03/agents/todo-template.md`.
@@ -107,7 +103,6 @@ Use the template at `gauntlet-03/agents/todo-template.md`.
 8. Documentation (comments, README, PR description)
 
 ### Step 5: Review and Finalize
-
 **Self-review checklist:**
 
 PRD:
@@ -127,7 +122,6 @@ TODO:
 - [ ] References gauntlet-03/agents/shared-standards.md where appropriate
 
 ### Step 6: Handoff
-
 **If YOLO: false** (PRD already reviewed):
 1. Notify user TODO is complete
 2. Provide file paths
@@ -139,33 +133,6 @@ TODO:
 2. Provide file paths
 3. Summarize key points
 4. Wait for user approval
-
----
-
-## Best Practices
-
-### Writing Requirements
-- ✅ Be specific and measurable
-- ✅ Include acceptance criteria
-- ✅ Define happy path AND edge cases
-- ✅ Consider video processing performance from the start (see gauntlet-03/agents/shared-standards.md)
-- ❌ Don't be vague ("make it better")
-- ❌ Don't skip error cases
-
-### Writing TODOs
-- ✅ Break work into small chunks
-- ✅ Start with data/backend, then UI
-- ✅ Test as you go (not all at end)
-- ✅ Reference gauntlet-03/agents/shared-standards.md for common patterns
-- ❌ Don't create giant tasks
-- ❌ Don't skip testing steps
-
-### Video Editor Focus
-Every feature MUST address (see gauntlet-03/agents/shared-standards.md for details):
-- Video file handling
-- Performance targets
-- FFmpeg integration
-- Auto-save functionality
 
 ---
 

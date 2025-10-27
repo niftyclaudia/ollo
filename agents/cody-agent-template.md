@@ -26,8 +26,6 @@ When starting, you will receive:
 ## Workflow
 
 ### Step 1: Setup
-
-Create branch FROM develop:
 ```bash
 git checkout develop
 git pull origin develop
@@ -35,7 +33,6 @@ git checkout -b feat/pr-{number}-{feature-name}
 ```
 
 ### Step 2: Read PRD and TODO
-
 **IMPORTANT:** PRD and TODO already created. Your job is to implement.
 
 **Verify you understand:**
@@ -47,7 +44,6 @@ git checkout -b feat/pr-{number}-{feature-name}
 **If unclear, ask for clarification before proceeding.**
 
 ### Step 3: Implementation
-
 **Follow TODO list exactly:**
 - Complete tasks in order (top to bottom)
 - **CHECK OFF each task immediately after completing it**
@@ -60,13 +56,7 @@ git checkout -b feat/pr-{number}-{feature-name}
 - Include comments for complex logic
 - Keep functions small and focused
 
-**Video processing & performance:**
-- See requirements in `gauntlet-03/agents/shared-standards.md`
-- Ensure FFmpeg operations are properly handled
-- Maintain responsive UI during video operations
-
 ### Step 4: Manual Testing
-
 **Follow manual testing protocol from `gauntlet-03/agents/test-template.md`**
 
 Required testing approach:
@@ -74,15 +64,9 @@ Required testing approach:
 2. **Performance verification** (mandatory): Verify targets from shared-standards.md
 3. **Cross-platform testing** (mandatory): Test on macOS and Windows
 
-See `gauntlet-03/agents/shared-standards.md` for:
-- Manual testing protocol
-- Performance targets
-- Definition of done checklist
-
 **Note:** Visual appearance (colors, spacing, fonts) verified manually by user.
 
 ### Step 5: Verify Acceptance Gates
-
 Check every gate from PRD Section 12:
 - [ ] All "Happy Path" gates pass
 - [ ] All "Edge Case" gates pass
@@ -96,7 +80,6 @@ Check every gate from PRD Section 12:
 4. Don't proceed until all pass
 
 ### Step 6: Verify With User (Before PR)
-
 **BEFORE creating PR:**
 
 1. **Build and run:**
@@ -118,14 +101,7 @@ Check every gate from PRD Section 12:
 
 4. **Wait for user approval** before proceeding
 
-**If user finds issues:**
-- Document in TODO
-- Fix issues
-- Re-run tests
-- Verify again
-
 ### Step 7: Create Pull Request
-
 **IMPORTANT: PR must target `develop` branch, NOT `main`**
 
 **PR title format:**
@@ -168,80 +144,6 @@ Any gotchas, trade-offs, or future improvements
 
 ---
 
-## Testing Checklist (Run Before PR)
-
-### Functional Tests
-- [ ] Feature works as described in PRD
-- [ ] All user interactions respond correctly
-- [ ] Error states handled gracefully
-- [ ] Loading states shown appropriately
-- [ ] Video operations complete successfully
-
-### Performance Tests (from shared-standards.md)
-- [ ] Timeline UI responsive with 10+ clips
-- [ ] App load time < 5 seconds
-- [ ] Video playback smooth 30fps minimum
-- [ ] Export completes without crashes
-- [ ] Memory usage < 1GB with 10 clips
-- [ ] No console warnings/errors
-
-### Manual Testing (from shared-standards.md)
-- [ ] MP4 and MOV files import correctly
-- [ ] Metadata extraction works
-- [ ] Thumbnail generation succeeds
-- [ ] Trim operations function properly
-- [ ] Export produces valid MP4 files
-- [ ] Auto-save works correctly
-
-### Cross-Platform Tests
-- [ ] macOS (primary platform)
-- [ ] Windows (secondary platform)
-- [ ] File system operations work
-- [ ] FFmpeg integration functions
-
-### Edge Cases
-- [ ] Empty timeline
-- [ ] Large video files (1GB+)
-- [ ] Invalid file formats
-- [ ] Corrupted video files
-
----
-
-## Code Review Self-Checklist
-
-Before submitting PR, review using checklist in `gauntlet-03/agents/shared-standards.md`:
-- Architecture
-- Code Quality
-- TypeScript/React Best Practices
-- Testing
-- Documentation
-
----
-
-## Emergency Procedures
-
-### If blocked:
-1. Document blocker in TODO
-2. Try different approach
-3. Ask for help
-4. Don't merge broken code
-
-### If tests fail in CI:
-1. Run tests locally first
-2. Check CI logs
-3. Fix issue
-4. Push to same branch
-5. Wait for CI to pass
-
-### If performance regresses:
-1. Use Xcode Instruments
-2. Identify bottleneck
-3. Optimize hot path
-4. Re-run performance tests
-5. Ensure 60fps maintained
-
----
-
 ## Success Criteria
 
 **PR ready for USER review when:**
@@ -264,43 +166,20 @@ Before submitting PR, review using checklist in `gauntlet-03/agents/shared-stand
 
 ---
 
-## Example Workflow
+## Emergency Procedures
 
-```bash
-# 1. Create branch
-git checkout develop
-git pull origin develop
-git checkout -b feat/pr-1-video-import
+### If blocked:
+1. Document blocker in TODO
+2. Try different approach
+3. Ask for help
+4. Don't merge broken code
 
-# 2. Read docs
-# - PRD, TODO, shared-standards
-
-# 3. Implement (follow TODO)
-# - Add video import functionality
-# - Check off each task as completed
-# - Document any blockers in TODO
-
-# 4. Manual testing
-# - Test with real video files
-# - Verify performance targets
-# - Test cross-platform
-
-# 6. Verify gates (all pass ✓)
-
-# 7. Verify with user
-# - Build and run
-# - Test video import feature
-# - Confirm: "Ready for PR?"
-# - WAIT for approval
-
-# 8. Create PR (targeting develop)
-git add .
-git commit -m "feat: add video import functionality"
-git push origin feat/pr-1-video-import
-# Create PR on GitHub with full description
-
-# 9. Merge when approved
-```
+### If tests fail in CI:
+1. Run tests locally first
+2. Check CI logs
+3. Fix issue
+4. Push to same branch
+5. Wait for CI to pass
 
 ---
 
