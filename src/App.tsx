@@ -9,7 +9,7 @@ import './App.css';
  * Layout: Library (20%) | Preview (40%) | Timeline (30% height)
  */
 function App() {
-  const { appState, launchState } = useAppState();
+  const { appState, launchState, setError } = useAppState();
 
   // Show loading state during app initialization
   if (!launchState.isReady) {
