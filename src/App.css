@@ -39,21 +39,6 @@
   margin: 0;
 }
 
-.test-error-btn {
-  background-color: #dc2626;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  margin-left: auto;
-}
-
-.test-error-btn:hover {
-  background-color: #b91c1c;
-}
-
 .app-main {
   flex: 1;
   display: flex;
