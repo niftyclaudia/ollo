@@ -1,50 +1,57 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { LibraryPanel } from './components/LibraryPanel';
+import { PreviewPanel } from './components/PreviewPanel';
+import { TimelinePanel } from './components/TimelinePanel';
+import { useAppState } from './hooks/useAppState';
+import './App.css';
 
+/**
+ * Main App component implementing three-panel layout for ollo video editor
+ * Layout: Library (20%) | Preview (40%) | Timeline (30% height)
+ */
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const { appState, launchState } = useAppState();
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+  // Show loading state during app initialization
+  if (!launchState.isReady) {
+    return (
+      <div className="app-loading">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <h2>ollo</h2>
+          <p>Loading video editor...</p>
+        </div>
+      </div>
+    );
   }
 
-  return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  // Show error state if app failed to initialize
+  if (appState.hasError) {
+    return (
+      <div className="app-error">
+        <div className="error-content">
+          <h2>ollo</h2>
+          <p>Failed to initialize application</p>
+          <p className="error-message">{appState.errorMessage}</p>
+        </div>
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+    );
+  }
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+  // Main three-panel layout
+  return (
+    <div className="app">
+      <div className="app-header">
+        <h1 className="app-title">ollo</h1>
+      </div>
+      
+      <div className="app-main">
+        <div className="app-panels">
+          <LibraryPanel />
+          <PreviewPanel />
+        </div>
+        <TimelinePanel />
+      </div>
+    </div>
   );
 }
 
