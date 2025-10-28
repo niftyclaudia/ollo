@@ -117,15 +117,15 @@ Reference requirements from `gauntlet-03/prd-v1.md`.
 
 Follow manual testing protocol from `gauntlet-03/prd-v1.md`.
 
-- [ ] Manual validation with real video files
+- [x] Manual validation with real video files
   - Test Gate: Import 3 different MP4/MOV files successfully
   - Test Gate: Thumbnails, filenames, and durations display correctly
   
-- [ ] Performance verification
+- [x] Performance verification
   - Test Gate: Metadata extraction <2 seconds per file (PERF-1)
   - Test Gate: Library panel remains responsive during import
   
-- [ ] Cross-platform testing
+- [x] Cross-platform testing
   - Test Gate: Works on macOS (primary platform)
   - Test Gate: File picker integration works correctly
   
