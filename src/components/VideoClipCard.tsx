@@ -1,15 +1,35 @@
 import { VideoClip } from '../types/AppState';
+import { useState, useEffect } from 'react';
+import { invoke } from '@tauri-apps/api/core';
+import { useCustomDrag } from '../contexts/CustomDragContext';
 
 interface VideoClipCardProps {
   clip: VideoClip;
   onClick?: () => void;
+  isSelected?: boolean;
+  onDragStart?: (clip: VideoClip) => void;
 }
 
 /**
  * VideoClipCard - Individual clip display with thumbnail, filename, duration
  * Shows video clip information in the Library panel
  */
-export const VideoClipCard = ({ clip, onClick }: VideoClipCardProps) => {
+export const VideoClipCard = ({ clip, onClick, isSelected = false, onDragStart }: VideoClipCardProps) => {
+  const [thumbnailDataUrl, setThumbnailDataUrl] = useState<string | null>(null);
+  const [thumbnailError, setThumbnailError] = useState(false);
+  const { startDrag } = useCustomDrag();
+
+  // Load thumbnail as data URL when component mounts
+  useEffect(() => {
+    if (clip.thumbnail && !thumbnailDataUrl && !thumbnailError) {
+      invoke<string>('get_thumbnail_data_url', { thumbnailPath: clip.thumbnail })
+        .then(setThumbnailDataUrl)
+        .catch((error) => {
+          console.error('Failed to load thumbnail:', error);
+          setThumbnailError(true);
+        });
+    }
+  }, [clip.thumbnail, thumbnailDataUrl, thumbnailError]);
   const formatDuration = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = Math.floor(seconds % 60);
@@ -24,29 +44,52 @@ export const VideoClipCard = ({ clip, onClick }: VideoClipCardProps) => {
     return `${(mb / 1024).toFixed(1)} GB`;
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (onDragStart && e.button === 0) { // Left mouse button only
+      if (onDragStart) {
+        onDragStart(clip);
+      }
+      startDrag(clip, { x: e.clientX, y: e.clientY });
+      e.preventDefault(); // Prevent text selection
+    }
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div 
       className="video-clip-card"
-      onClick={onClick}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
       style={{
-        cursor: onClick ? 'pointer' : 'default',
-        border: '1px solid #e0e0e0',
+        cursor: onClick ? 'pointer' : onDragStart ? 'grab' : 'default',
+        border: isSelected ? '2px solid #007bff' : '1px solid #e0e0e0',
         borderRadius: '8px',
         padding: '12px',
         marginBottom: '8px',
-        backgroundColor: '#fff',
+        backgroundColor: isSelected ? '#f0f8ff' : '#fff',
         transition: 'all 0.2s ease',
       }}
       onMouseEnter={(e) => {
-        if (onClick) {
+        if (onClick && !isSelected) {
           e.currentTarget.style.backgroundColor = '#f5f5f5';
           e.currentTarget.style.borderColor = '#007bff';
         }
+        if (onDragStart) {
+          e.currentTarget.style.cursor = 'grab';
+        }
       }}
       onMouseLeave={(e) => {
-        if (onClick) {
+        if (onClick && !isSelected) {
           e.currentTarget.style.backgroundColor = '#fff';
           e.currentTarget.style.borderColor = '#e0e0e0';
+        }
+        if (onDragStart) {
+          e.currentTarget.style.cursor = 'grab';
         }
       }}
     >
@@ -65,23 +108,28 @@ export const VideoClipCard = ({ clip, onClick }: VideoClipCardProps) => {
           overflow: 'hidden',
         }}
       >
-        {clip.thumbnail ? (
+        {thumbnailDataUrl ? (
           <img 
-            src={`file://${clip.thumbnail}`}
+            src={thumbnailDataUrl}
             alt={clip.filename}
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
             }}
-            onError={(e) => {
-              // Fallback to generic video icon if thumbnail fails to load
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement!.innerHTML = '🎬';
-            }}
           />
-        ) : (
+        ) : thumbnailError ? (
           <span style={{ fontSize: '24px', color: '#666' }}>🎬</span>
+        ) : (
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            fontSize: '12px',
+            color: '#999'
+          }}>
+            Loading...
+          </div>
         )}
       </div>
 

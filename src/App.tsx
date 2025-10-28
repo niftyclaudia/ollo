@@ -4,7 +4,8 @@ import { TimelinePanel } from './components/TimelinePanel';
 import { useAppState } from './hooks/useAppState';
 import { useVideoImport } from './contexts/VideoImportContext';
 import { VideoImportProvider } from './contexts/VideoImportContext';
-import { useEffect } from 'react';
+import { CustomDragProvider } from './contexts/CustomDragContext';
+import { useEffect, useCallback } from 'react';
 import { listen } from '@tauri-apps/api/event';
 import './App.css';
 
@@ -15,10 +16,11 @@ function AppContent() {
   const { appState, launchState } = useAppState();
   const { importFiles } = useVideoImport();
 
-  // Listen for Tauri file drop events
+  // Listen for Tauri file drop events (from Finder/Explorer)
+  // This handles EXTERNAL file drops with smart drop zones
   useEffect(() => {
-    const unlisten = listen<string[]>('file-drop', async (event) => {
-      const filePaths = event.payload;
+    const unlisten = listen<{ paths: string[], position: { x: number, y: number } }>('file-drop-with-position', async (event) => {
+      const { paths: filePaths, position } = event.payload;
       
       // Filter for video files
       const videoFiles = filePaths.filter(path => {
@@ -27,9 +29,26 @@ function AppContent() {
       });
       
       if (videoFiles.length > 0) {
-        // Import the files using the existing import logic
+        // Determine which panel was dropped on based on position
+        const timelinePanel = document.querySelector('.timeline-panel');
+        const timelineRect = timelinePanel?.getBoundingClientRect();
+        
+        const isOverTimeline = timelineRect && 
+          position.x >= timelineRect.left &&
+          position.x <= timelineRect.right &&
+          position.y >= timelineRect.top &&
+          position.y <= timelineRect.bottom;
+        
+        // Import the files to library
         try {
           await importFiles(videoFiles);
+          
+          // If dropped on timeline, emit event so Timeline can auto-add clips
+          if (isOverTimeline) {
+            window.dispatchEvent(new CustomEvent('external-files-imported-to-timeline', {
+              detail: { filePaths: videoFiles }
+            }));
+          }
         } catch (error) {
           console.error('Import failed:', error);
           alert(`Failed to import files: ${error}`);
@@ -63,26 +82,31 @@ function AppContent() {
       <div className="app-error">
         <div className="error-content">
           <h2>ollo</h2>
-          <p>Failed to initialize application</p>
           <p className="error-message">{appState.errorMessage}</p>
+          <button onClick={() => window.location.reload()}>
+            Reload App
+          </button>
         </div>
       </div>
     );
   }
 
-  // Main three-panel layout
   return (
     <div className="app">
-      <div className="app-header">
-        <h1 className="app-title">ollo</h1>
-      </div>
-      
+      {/* Main app content with three-panel layout */}
       <div className="app-main">
         <div className="app-panels">
-          <LibraryPanel />
-          <PreviewPanel />
+          {/* Library Panel - 20% width */}
+          <LibraryPanel className="panel" />
+          
+          {/* Preview Panel - 40% width */}
+          <PreviewPanel className="panel" />
         </div>
-        <TimelinePanel />
+        
+        {/* Timeline Panel - Full width, 30% height */}
+        <div className="timeline-container">
+          <TimelinePanel />
+        </div>
       </div>
     </div>
   );
@@ -95,7 +119,9 @@ function AppContent() {
 function App() {
   return (
     <VideoImportProvider>
-      <AppContent />
+      <CustomDragProvider>
+        <AppContent />
+      </CustomDragProvider>
     </VideoImportProvider>
   );
 }
