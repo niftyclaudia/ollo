@@ -25,9 +25,9 @@ Implement the Library View panel that displays imported video clips with thumbna
 - **What video editing problem are we solving?** Users need a way to organize and preview imported video files before adding them to their timeline for editing.
 - **Why now?** This is Phase 2 of the MVP implementation, building on the video import functionality from Phase 1.
 - **Goals (ordered, measurable):**
-  - [ ] G1 — Display imported video clips with thumbnails and metadata in a scrollable library panel
-  - [ ] G2 — Enable click-to-preview functionality for clips in the library
-  - [ ] G3 — Support drag-and-drop from library to timeline for sequence building
+  - [x] G1 — Display imported video clips with thumbnails and metadata in a scrollable library panel
+  - [x] G2 — Enable click-to-preview functionality for clips in the library
+  - [x] G3 — Support drag-and-drop from library to timeline for sequence building
 
 ---
 
@@ -35,10 +35,10 @@ Implement the Library View panel that displays imported video clips with thumbna
 
 Call out what's intentionally excluded to avoid scope creep.
 
-- [ ] Not implementing timeline functionality (separate PR)
-- [ ] Not implementing video trimming (separate PR)
-- [ ] Not implementing advanced library features like search, filtering, or folders
-- [ ] Not implementing clip editing within the library view
+- [x] Not implementing timeline functionality (separate PR)
+- [x] Not implementing video trimming (separate PR)
+- [x] Not implementing advanced library features like search, filtering, or folders
+- [x] Not implementing clip editing within the library view
 
 ---
 

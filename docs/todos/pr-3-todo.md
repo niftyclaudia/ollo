@@ -92,19 +92,19 @@ Reference requirements from `gauntlet-03/prd-v1.md`.
 
 Follow manual testing protocol from `gauntlet-03/prd-v1.md`.
 
-- [ ] Manual validation with real video files
+- [x] Manual validation with real video files
   - Test Gate: All features work with actual MP4/MOV files
   
-- [ ] Performance verification
+- [x] Performance verification
   - Test Gate: Library panel responsive with 10+ clips, thumbnail generation <5 seconds
   
-- [ ] Cross-platform testing
+- [x] Cross-platform testing
   - Test Gate: Works on macOS and Windows
   
-- [ ] Edge case testing
+- [x] Edge case testing
   - Test Gate: Large files, corrupted files, invalid formats handled gracefully
   
-- [ ] Definition of done checklist
+- [x] Definition of done checklist
   - Test Gate: All items from prd-v1.md verified
 
 ---
@@ -113,13 +113,13 @@ Follow manual testing protocol from `gauntlet-03/prd-v1.md`.
 
 Verify targets from `gauntlet-03/prd-v1.md`.
 
-- [ ] Library panel loads 10+ clips without UI lag
+- [x] Library panel loads 10+ clips without UI lag
   - Test Gate: UI remains responsive during thumbnail generation
-- [ ] Drag operations respond in <50ms
+- [x] Drag operations respond in <50ms
   - Test Gate: Drag response time measured and verified
-- [ ] Memory usage <1GB with 10 clips
+- [x] Memory usage <1GB with 10 clips
   - Test Gate: Memory usage monitored and within limits
-- [ ] Thumbnail generation completes in <5 seconds per clip
+- [x] Thumbnail generation completes in <5 seconds per clip
   - Test Gate: Generation time measured for various file sizes
 
 ---
@@ -127,18 +127,18 @@ Verify targets from `gauntlet-03/prd-v1.md`.
 ## 8. Acceptance Gates
 
 Check every gate from PRD Section 12:
-- [ ] All happy path gates pass (import → display → preview → drag)
-- [ ] All edge case gates pass (corrupted files, large files, empty library)
-- [ ] All video processing gates pass (thumbnail generation, metadata extraction)
-- [ ] All performance gates pass (UI responsiveness, memory usage)
+- [x] All happy path gates pass (import → display → preview → drag)
+- [x] All edge case gates pass (corrupted files, large files, empty library)
+- [x] All video processing gates pass (thumbnail generation, metadata extraction)
+- [x] All performance gates pass (UI responsiveness, memory usage)
 
 ---
 
 ## 9. Documentation & PR
 
-- [ ] Add inline code comments for complex logic (FFmpeg integration, drag-and-drop)
-- [ ] Update README if needed
-- [ ] Create PR description (use format from gauntlet-03/agents/cody-agent-template.md)
+- [x] Add inline code comments for complex logic (FFmpeg integration, drag-and-drop)
+- [x] Update README if needed
+- [x] Create PR description (use format from gauntlet-03/agents/cody-agent-template.md)
 - [ ] Verify with user before creating PR
 - [ ] Open PR targeting develop branch
 - [ ] Link PRD and TODO in PR description
