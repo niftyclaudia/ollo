@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { VideoClip, ImportValidation } from '../types/AppState';
 
@@ -7,6 +7,7 @@ interface ImportState {
   importProgress: number;
   error: string | null;
   clips: VideoClip[];
+  selectedClipId: string | null;
 }
 
 interface VideoImportContextType {
@@ -15,6 +16,7 @@ interface VideoImportContextType {
   isImporting: boolean;
   importProgress: number;
   error: string | null;
+  selectedClipId: string | null;
   
   // Actions
   importFiles: (filePaths: string[]) => Promise<void>;
@@ -22,6 +24,7 @@ interface VideoImportContextType {
   clearError: () => void;
   removeClip: (clipId: string) => void;
   clearLibrary: () => void;
+  selectClip: (clipId: string | null) => void;
 }
 
 const VideoImportContext = createContext<VideoImportContextType | undefined>(undefined);
@@ -36,7 +39,37 @@ export const VideoImportProvider = ({ children }: VideoImportProviderProps) => {
     importProgress: 0,
     error: null,
     clips: [],
+    selectedClipId: null,
   });
+
+  // Auto-save library state every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (state.clips.length > 0) {
+        try {
+          // Save library state to local storage as backup
+          localStorage.setItem('ollo-library-state', JSON.stringify(state.clips));
+        } catch (error) {
+          console.warn('Failed to save library state:', error);
+        }
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [state.clips]);
+
+  // Load library state on startup
+  useEffect(() => {
+    try {
+      const savedState = localStorage.getItem('ollo-library-state');
+      if (savedState) {
+        const clips = JSON.parse(savedState) as VideoClip[];
+        setState(prev => ({ ...prev, clips }));
+      }
+    } catch (error) {
+      console.warn('Failed to load library state:', error);
+    }
+  }, []);
 
   const validateFile = useCallback(async (filePath: string): Promise<ImportValidation> => {
     try {
@@ -126,28 +159,27 @@ export const VideoImportProvider = ({ children }: VideoImportProviderProps) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
-        // For HTML5 file input, we need to create a temporary file path
-        // In a real Tauri app, we'd need to copy the file to a temp location
-        // For now, let's create a mock video clip with the file info
-        const mockClip: VideoClip = {
-          id: `clip-${Date.now()}-${i}`,
-          path: file.name, // Using name as path for now
-          filename: file.name,
-          duration: 0, // We'll need to extract this
-          thumbnail: '', // We'll generate this
-          metadata: {
-            width: 1920,
-            height: 1080,
-            framerate: 30,
-            codec: 'h264',
-            fileSize: file.size,
-          },
-          importedAt: new Date(),
-        };
-
+        // For HTML5 file input, we need to create a temporary file that Tauri can access
+        // We'll use the file's name and create it in a temp directory
+        const tempDir = await invoke<string>('get_temp_dir');
+        const tempPath = `${tempDir}/${file.name}`;
+        
+        // Copy the file content to the temporary location
+        const arrayBuffer = await file.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        
+        // Write the file to the temporary location
+        await invoke('write_temp_file', { 
+          filePath: tempPath, 
+          data: Array.from(uint8Array) 
+        });
+        
+        // Use the actual Tauri command to create the video clip
+        const clip = await invoke<VideoClip>('create_video_clip', { filePath: tempPath });
+        
         setState(prev => ({
           ...prev,
-          clips: [...prev.clips, mockClip],
+          clips: [...prev.clips, clip],
         }));
 
         completedFiles++;
@@ -184,6 +216,14 @@ export const VideoImportProvider = ({ children }: VideoImportProviderProps) => {
       ...prev,
       clips: [],
       error: null,
+      selectedClipId: null,
+    }));
+  }, []);
+
+  const selectClip = useCallback((clipId: string | null) => {
+    setState(prev => ({
+      ...prev,
+      selectedClipId: clipId,
     }));
   }, []);
 
@@ -192,11 +232,13 @@ export const VideoImportProvider = ({ children }: VideoImportProviderProps) => {
     isImporting: state.isImporting,
     importProgress: state.importProgress,
     error: state.error,
+    selectedClipId: state.selectedClipId,
     importFiles,
     importFromFiles,
     clearError,
     removeClip,
     clearLibrary,
+    selectClip,
   };
 
   return (
