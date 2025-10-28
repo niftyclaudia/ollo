@@ -19,13 +19,39 @@ export interface AppState {
   selectedClipId: string | null; // null initially
 }
 
-// Placeholder interfaces for future video editing features
+// Video clip data structure for import & library functionality
 export interface VideoClip {
-  id: string;
-  filePath: string;
-  fileName: string;
-  duration: number;
-  thumbnail?: string;
+  id: string; // UUID
+  path: string; // File system path
+  filename: string; // Display name
+  duration: number; // Duration in seconds
+  thumbnail: string; // Path to thumbnail image
+  metadata: VideoMetadata;
+  importedAt: Date; // Timestamp
+}
+
+// Video metadata extracted using FFmpeg
+export interface VideoMetadata {
+  width: number;
+  height: number;
+  framerate: number;
+  codec: string;
+  fileSize: number; // Bytes
+}
+
+// Import validation result
+export interface ImportValidation {
+  isValidFormat: boolean;
+  isWithinSizeLimit: boolean;
+  errorMessage?: string;
+}
+
+// Library state for import operations
+export interface LibraryState {
+  clips: VideoClip[];
+  isImporting: boolean;
+  importProgress: number; // 0-100
+  error: string | null;
 }
 
 export interface TimelineClip {
