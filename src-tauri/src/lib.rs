@@ -203,6 +203,74 @@ async fn generate_thumbnail(file_path: String, output_path: String) -> Result<()
 //     }
 // }
 
+// Get temporary directory path
+#[tauri::command]
+async fn get_temp_dir() -> Result<String, String> {
+    Ok(std::env::temp_dir().to_string_lossy().to_string())
+}
+
+// Write temporary file from frontend data
+#[tauri::command]
+async fn write_temp_file(file_path: String, data: Vec<u8>) -> Result<(), String> {
+    // Ensure parent directory exists
+    if let Some(parent) = Path::new(&file_path).parent() {
+        fs::create_dir_all(parent)
+            .map_err(|e| format!("Failed to create directory: {}", e))?;
+    }
+    
+    // Write the file
+    fs::write(&file_path, data)
+        .map_err(|e| format!("Failed to write file: {}", e))?;
+    
+    Ok(())
+}
+
+// Read thumbnail file and convert to base64 data URL
+#[tauri::command]
+async fn get_thumbnail_data_url(thumbnail_path: String) -> Result<String, String> {
+    let thumbnail_data = fs::read(&thumbnail_path)
+        .map_err(|e| format!("Failed to read thumbnail: {}", e))?;
+    
+    use base64::{Engine as _, engine::general_purpose};
+    let base64_data = general_purpose::STANDARD.encode(&thumbnail_data);
+    let data_url = format!("data:image/jpeg;base64,{}", base64_data);
+    
+    Ok(data_url)
+}
+
+// Get video file as base64 data URL for blob creation
+#[tauri::command]
+async fn get_video_asset_url(video_path: String) -> Result<String, String> {
+    let path = Path::new(&video_path);
+    
+    // Check if file exists
+    if !path.exists() {
+        return Err("Video file does not exist".to_string());
+    }
+    
+    // Read the video file
+    let video_data = fs::read(&video_path)
+        .map_err(|e| format!("Failed to read video file: {}", e))?;
+    
+    // Convert to base64
+    use base64::{Engine as _, engine::general_purpose};
+    let base64_data = general_purpose::STANDARD.encode(&video_data);
+    
+    // Determine MIME type based on file extension
+    let mime_type = path.extension()
+        .and_then(|ext| ext.to_str())
+        .map(|ext| match ext.to_lowercase().as_str() {
+            "mp4" => "video/mp4",
+            "mov" => "video/quicktime",
+            _ => "video/mp4", // default
+        })
+        .unwrap_or("video/mp4");
+    
+    // Create data URL
+    let data_url = format!("data:{};base64,{}", mime_type, base64_data);
+    Ok(data_url)
+}
+
 // Get file size
 #[tauri::command]
 async fn get_file_size(file_path: String) -> Result<u64, String> {
@@ -298,27 +366,43 @@ pub fn run() {
             extract_video_metadata,
             generate_thumbnail,
             get_file_size,
-            create_video_clip
+            create_video_clip,
+            get_temp_dir,
+            write_temp_file,
+            get_thumbnail_data_url,
+            get_video_asset_url
         ])
+        // Tauri file drop handler - handles EXTERNAL file drops from Finder/Explorer
+        // This works alongside our custom mouse-based drag for internal dragging
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::DragDrop(drag_drop_event) = event {
                 match drag_drop_event {
                     tauri::DragDropEvent::Enter { paths, .. } => {
-                        println!("Files entered: {:?}", paths);
+                        println!("📁 External files entered: {:?}", paths);
                     }
                     tauri::DragDropEvent::Over { position, .. } => {
-                        println!("Files over at position: {:?}", position);
+                        println!("📁 External files over at position: {:?}", position);
                     }
-                    tauri::DragDropEvent::Drop { paths, .. } => {
-                        println!("Files dropped: {:?}", paths);
-                        // Emit event to frontend
-                        match window.emit("file-drop", paths) {
-                            Ok(_) => println!("Event emitted successfully"),
-                            Err(e) => println!("Failed to emit event: {:?}", e),
+                    tauri::DragDropEvent::Drop { paths, position } => {
+                        println!("📁 External files dropped at {:?}: {:?}", position, paths);
+                        
+                        // Create payload with both paths and position
+                        let payload = serde_json::json!({
+                            "paths": paths,
+                            "position": {
+                                "x": position.x,
+                                "y": position.y
+                            }
+                        });
+                        
+                        // Emit event to frontend with position info
+                        match window.emit("file-drop-with-position", &payload) {
+                            Ok(_) => println!("✅ File drop event emitted successfully"),
+                            Err(e) => println!("❌ Failed to emit file drop event: {:?}", e),
                         }
                     }
                     tauri::DragDropEvent::Leave => {
-                        println!("File drop left");
+                        println!("📁 External file drop left");
                     }
                     _ => {}
                 }

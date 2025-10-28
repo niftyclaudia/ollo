@@ -3,6 +3,7 @@ import { EmptyState } from './EmptyState';
 import { VideoClipCard } from './VideoClipCard';
 import { ImportButton } from './ImportButton';
 import { useVideoImport } from '../contexts/VideoImportContext';
+import { VideoClip } from '../types/AppState';
 
 interface LibraryPanelProps {
   className?: string;
@@ -14,7 +15,7 @@ interface LibraryPanelProps {
  * Displays video clips with thumbnails, filenames, and durations
  */
 export const LibraryPanel = ({ className = "" }: LibraryPanelProps) => {
-  const { clips, isImporting, importProgress, error, importFromFiles, clearError } = useVideoImport();
+  const { clips, isImporting, importProgress, error, importFromFiles, clearError, selectedClipId, selectClip } = useVideoImport();
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -72,8 +73,13 @@ export const LibraryPanel = ({ className = "" }: LibraryPanelProps) => {
   }, [importFromFiles]);
 
   const handleClipClick = useCallback((clipId: string) => {
-    // Future: Handle clip selection for timeline
+    selectClip(clipId);
+  }, [selectClip]);
+
+  const handleClipDragStart = useCallback((clip: VideoClip) => {
+    // Drag will be handled by VideoClipCard's onMouseDown
   }, []);
+
 
   return (
     <div className={`library-panel ${className}`}>
@@ -207,6 +213,8 @@ export const LibraryPanel = ({ className = "" }: LibraryPanelProps) => {
                 key={clip.id}
                 clip={clip}
                 onClick={() => handleClipClick(clip.id)}
+                isSelected={selectedClipId === clip.id}
+                onDragStart={handleClipDragStart}
               />
             ))}
           </div>

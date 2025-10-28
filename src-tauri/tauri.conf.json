@@ -23,6 +23,12 @@
     ],
     "security": {
       "csp": null
+    },
+    "withGlobalTauri": false
+  },
+  "plugins": {
+    "fs": {
+      "scope": ["$HOME/**", "$TEMP/**", "$TMP/**", "$DOWNLOAD/**"]
     }
   },
   "bundle": {
